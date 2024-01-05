@@ -60,7 +60,7 @@ public class Drive extends SubsystemBase {
 
         SparkPIDController[] steerControllers = {
             m_frontLeftSteerPID, m_frontRightSteerPID,
-            m_backLeftSteerPID, m_backRightDrivePID
+            m_backLeftSteerPID, m_backRightSteerPID
         };
 
         // configure drive PIDs
