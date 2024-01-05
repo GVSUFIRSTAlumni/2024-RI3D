@@ -21,24 +21,30 @@ public class Wheel {
         m_drivePID = m_driveMotor.getPIDController();
         m_steerPID = m_steerMotor.getPIDController();
 
-        m_driveMotor.stopMotor();
-        m_steerMotor.stopMotor();
+        stop();
 
         // TODO configure motor parameters (current, PID, etc)
         m_drivePID.setP(0d);
         m_drivePID.setI(0d);
+        m_drivePID.setIZone(0d);
         m_drivePID.setD(0d);
         m_drivePID.setFF(0d);
         m_drivePID.setOutputRange(0d, 0d);
 
         m_steerPID.setP(0d);
         m_steerPID.setI(0d);
+        m_steerPID.setIZone(0d);
         m_steerPID.setD(0d);
         m_steerPID.setFF(0d);
         m_steerPID.setOutputRange(0d, 0d);
 
         m_driveMotor.burnFlash();
         m_steerMotor.burnFlash();
+    }
+
+    public void stop() {
+        m_driveMotor.stopMotor();
+        m_steerMotor.stopMotor();
     }
 
     public WheelPos getPos() {
