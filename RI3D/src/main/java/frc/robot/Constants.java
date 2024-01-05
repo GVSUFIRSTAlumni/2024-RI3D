@@ -18,11 +18,23 @@ public final class Constants {
     public final class DrivetrainConstants {
         public static final int frontLeftDriveID = 0;
         public static final int frontLeftSteerID = 0;
+        public static final double frontLeftXOffset = 0.0;
+        public static final double frontLeftYOffset = 0.0;
+
         public static final int frontRightDriveID = 0;
         public static final int frontRightSteerID = 0;
+        public static final double frontRightXOffset = 0.0;
+        public static final double frontRightYOffset = 0.0;
+
         public static final int backLeftDriveID = 0;
         public static final int backLeftSteerID = 0;
-        public static final int backRighttDriveID = 0;
+        public static final double backLeftXOffset = 0.0;
+        public static final double backLeftYOffset = 0.0;
+
+        public static final int backRightDriveID = 0;
         public static final int backRightSteerID = 0;
+        public static final double backRightXOffset = 0.0;
+        public static final double backRightYOffset = 0.0;
+        
     }
 }

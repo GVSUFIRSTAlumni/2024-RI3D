@@ -10,10 +10,18 @@ public class Gyro {
     public Gyro() {
     }
 
+    /**
+     * 
+     * @return raw gyro angle in degrees
+     */
     public double getGyroAngle() {
         return m_gyro.getCompassHeading();
     }
 
+    /**
+     * 
+     * @return gyro angle in degrees, clamped [0,360)
+     */
     public double getGyroAngleClamped() {
         // %360 -> (-360, 360)
         // +360 -> [0,720)
