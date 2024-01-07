@@ -15,28 +15,28 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int pigeonID = 0;
+    public static final int pigeonID = 5;
     public static final int kDriveController = 1;
     public static final double kDeadzone = 0.05;
 
     public static final class DrivetrainConstants {
         public static final double maxSpeed = Units.feetToMeters(15.1);
 
-        public static final int frontLeftDriveID = 0;
-        public static final int frontLeftSteerID = 0;
-        public static final int frontLeftCANCoderID = 0;
+        public static final int frontLeftDriveID = 7;
+        public static final int frontLeftSteerID = 1;
+        public static final int frontLeftCANCoderID = 1;
 
-        public static final int frontRightDriveID = 0;
-        public static final int frontRightSteerID = 0;
+        public static final int frontRightDriveID = 4;
+        public static final int frontRightSteerID = 3;
         public static final int frontRightCANCoderID = 0;
 
-        public static final int backLeftDriveID = 0;
-        public static final int backLeftSteerID = 0;
-        public static final int backLeftCANCoderID = 0;
+        public static final int backLeftDriveID = 2;
+        public static final int backLeftSteerID = 8;
+        public static final int backLeftCANCoderID = 3;
 
-        public static final int backRightDriveID = 0;
-        public static final int backRightSteerID = 0;
-        public static final int backRightCANCoderID = 0;
+        public static final int backRightDriveID = 5;
+        public static final int backRightSteerID = 6;
+        public static final int backRightCANCoderID = 2;
 
         public static final double xOffsetMeters = 0d;
         public static final double yOffsetMeters = 0d;

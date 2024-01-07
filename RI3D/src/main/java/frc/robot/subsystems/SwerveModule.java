@@ -37,9 +37,11 @@ public class SwerveModule {
         m_encoderOffset = new Rotation2d(encoderOffset);
 
         m_drivePID = m_driveMotor.getPIDController();
-        m_steerPID = new PIDController(0, 0, 0); // TODO: set theses
+        m_steerPID = new PIDController(0.2, 0, 0); // TODO: set theses
         
         m_lastAngle = getState().angle;
+
+        m_curState = new SwerveModuleState();
 
         configDrive();
     }
@@ -58,7 +60,7 @@ public class SwerveModule {
      * @return
      */
     private SwerveModuleState getState() {
-        if (m_curState != null) {
+        if (m_curState == null) {
             m_curState = new SwerveModuleState();
         }
 
@@ -120,17 +122,17 @@ public class SwerveModule {
         m_driveMotor.getEncoder().setPositionConversionFactor((Units.inchesToMeters(3) * Math.PI / 6.75));
 
         // PID loop        
-        m_drivePID.setP(0d);
+        m_drivePID.setP(0.1);
         m_drivePID.setI(0d);
         m_drivePID.setIZone(0d);
         m_drivePID.setD(0d);
         m_drivePID.setFF(0d);
 
-        m_drivePID.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
-        m_drivePID.setSmartMotionAllowedClosedLoopError(0d, 0);
-        m_drivePID.setSmartMotionMaxAccel(0d, 0);
-        m_drivePID.setSmartMotionMaxVelocity(0d, 0);
-        m_drivePID.setSmartMotionMinOutputVelocity(0d, 0);
+        // m_drivePID.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+        // m_drivePID.setSmartMotionAllowedClosedLoopError(0d, 0);
+        // m_drivePID.setSmartMotionMaxAccel(0d, 0);
+        // m_drivePID.setSmartMotionMaxVelocity(0d, 0);
+        // m_drivePID.setSmartMotionMinOutputVelocity(0d, 0);
 
         m_driveMotor.burnFlash();
     }
