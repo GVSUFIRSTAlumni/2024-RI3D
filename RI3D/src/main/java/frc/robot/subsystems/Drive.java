@@ -1,13 +1,10 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,6 +17,7 @@ public class Drive extends SubsystemBase {
     private final Translation2d m_frontLeftLocation, m_frontRightLocation;
     private final Translation2d m_backLeftLocation, m_backRightLocation;
     private final SwerveDriveKinematics m_kinematics;
+    private final SwerveDriveOdometry m_odometry;
 
     private final Gyro m_Gyro;
 
@@ -35,14 +33,15 @@ public class Drive extends SubsystemBase {
         m_backRightLocation = new Translation2d(DrivetrainConstants.xOffsetMeters, -DrivetrainConstants.yOffsetMeters);
 
         m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+
+        m_odometry = new SwerveDriveOdometry(m_kinematics, gyro.getGyroAngle(), null);
     }
 
     /**
      * 
-     * @param forwardMag    forward/backward speed in m/s; +forward, -backward
-     * @param sideMag       sideways speed in m/s; +left, -right
-     * @param rotMag        rotation in radians/second
-     * @param fieldOriented if true, is field oriented
+     * @param translation   linear movement (meters/sec)
+     * @param rotation      rotational magnitude (radians/sec)
+     * @param fieldOriented if true, swerve with respect to the bot
      */
     public void swerve(Translation2d translation, Rotation2d rotation, boolean fieldOriented) {
         ChassisSpeeds speeds;
@@ -59,11 +58,10 @@ public class Drive extends SubsystemBase {
 
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
 
-        // TODO rotation2d arg should be steer motor angle
-        SwerveModuleState frontLeftState  = SwerveModuleState.optimize(moduleStates[0], new Rotation2d(0d));
-        SwerveModuleState frontRightState = SwerveModuleState.optimize(moduleStates[1], new Rotation2d(0d));
-        SwerveModuleState backLeftState   = SwerveModuleState.optimize(moduleStates[2], new Rotation2d(0d));
-        SwerveModuleState backRightState  = SwerveModuleState.optimize(moduleStates[3], new Rotation2d(0d));
+        SwerveModuleState frontLeftState  = SwerveModuleState.optimize(moduleStates[0], new Rotation2d(m_frontLeft.getAngle()));
+        SwerveModuleState frontRightState = SwerveModuleState.optimize(moduleStates[1], new Rotation2d(m_frontRight.getAngle()));
+        SwerveModuleState backLeftState   = SwerveModuleState.optimize(moduleStates[2], new Rotation2d(m_backLeft.getAngle()));
+        SwerveModuleState backRightState  = SwerveModuleState.optimize(moduleStates[3], new Rotation2d(m_backRight.getAngle()));
 
         m_frontLeft.setDesiredState(frontLeftState);
         m_frontRight.setDesiredState(frontRightState);
@@ -73,14 +71,18 @@ public class Drive extends SubsystemBase {
 
     /**
      * swerve with respect to the field
-     * @param linMag linear magnitude - controls speed
-     * @param linAng linear angle - contro
-     * @param rotMag
+     * @param translation   linear movement (meters/sec)
+     * @param rotation      rotation (radians/sec)
      */
-    public void swerve(double linMag, double linAng, double rotMag) {
-        swerve(linMag, linAng, rotMag, true);
+    public void swerve(Translation2d translation, Rotation2d rotation) {
+        swerve(translation, rotation, true);
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+        m_frontLeft.updateSteer();
+        m_frontRight.updateSteer();
+        m_backLeft.updateSteer();
+        m_backRight.updateSteer();
+    }
 }
