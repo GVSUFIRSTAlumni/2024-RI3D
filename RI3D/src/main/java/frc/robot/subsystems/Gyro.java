@@ -18,6 +18,10 @@ public class Gyro {
         return m_gyro.getCompassHeading();
     }
 
+    public void zeroGyro() {
+        m_gyro.setYaw(0);
+    }
+
     /**
      * 
      * @return gyro angle in degrees, clamped [0,360)

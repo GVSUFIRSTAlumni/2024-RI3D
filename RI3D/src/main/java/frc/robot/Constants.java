@@ -16,6 +16,8 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     public static final int pigeonID = 0;
+    public static final int kDriveController = 1;
+    public static final double kDeadzone = 0.05;
 
     public static final class DrivetrainConstants {
         public static final double maxSpeed = Units.feetToMeters(15.1);

@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -10,6 +9,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.DrivetrainConstants;
 
 public class SwerveModule {
@@ -79,7 +79,7 @@ public class SwerveModule {
      * 
      * @param state
      */
-    private void setSpeed(SwerveModuleState state) {
+    public void setSpeed(SwerveModuleState state) {
         m_drivePID.setReference(state.speedMetersPerSecond, ControlType.kVoltage);
     }
 
@@ -87,9 +87,9 @@ public class SwerveModule {
      * 
      * @return 
      */
-    private double getAngle() {
+    public double getAngle() {
         // 360 degrees in a circle divided by 4096 encoder counts/revolution (CANCoder resolution)
-        return m_CANCoder.getPosition() * (360 / 4096);
+        return (m_CANCoder.getPosition() * (360 / 4096)) - m_encoderOffset.getDegrees();
     }
 
     /**
@@ -98,7 +98,6 @@ public class SwerveModule {
      */
     private void setAngle(SwerveModuleState state) {
         Rotation2d angle = (Math.abs(state.speedMetersPerSecond) <= (DrivetrainConstants.maxSpeed * 0.01)) ? m_lastAngle : state.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        
         m_steerPID.setSetpoint(angle.getDegrees());
         m_lastAngle = angle;
     }
@@ -107,8 +106,7 @@ public class SwerveModule {
      * 
      */
     private void configDrive() {
-        // TODO conversions
-        m_driveMotor.getEncoder().setVelocityConversionFactor(0); // in meters per second
+        m_driveMotor.getEncoder().setVelocityConversionFactor((Units.inchesToMeters(3) * Math.PI / 6.75)); // in meters per second
 
         // PID loop        
         m_drivePID.setP(0d);
@@ -118,5 +116,9 @@ public class SwerveModule {
         m_drivePID.setFF(0d);
 
         m_driveMotor.burnFlash();
+    }
+
+    public void updateSteer() {
+        m_steerMotor.setVoltage(m_steerPID.calculate(getAngle()));
     }
 }

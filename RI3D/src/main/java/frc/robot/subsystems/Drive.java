@@ -34,7 +34,7 @@ public class Drive extends SubsystemBase {
 
         m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-        m_odometry = new SwerveDriveOdometry(m_kinematics, gyro.getGyroAngle(), null);
+        m_odometry = new SwerveDriveOdometry(m_kinematics, gyro.getGyroAngle(), );
     }
 
     /**
