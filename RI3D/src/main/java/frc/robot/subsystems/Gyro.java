@@ -16,7 +16,7 @@ public class Gyro {
      * @return raw gyro angle in degrees
      */
     public Rotation2d getGyroAngle() {
-        return new Rotation2d(m_gyro.getCompassHeading());
+        return new Rotation2d(m_gyro.getAbsoluteCompassHeading());
     }
 
     public void zeroGyro() {
@@ -31,6 +31,7 @@ public class Gyro {
         // %360 -> (-360, 360)
         // +360 -> [0,720)
         // %360 -> [0,360)
-        return ((m_gyro.getCompassHeading() % 360) + 360) % 360;
+        // return ((m_gyro.getCompassHeading() % 360) + 360) % 360;
+        return m_gyro.getAbsoluteCompassHeading();
     }
 }
