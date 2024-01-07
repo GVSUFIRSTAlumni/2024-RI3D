@@ -44,7 +44,8 @@ public class TeleopDrive extends CommandBase {
     var xVal = MathUtil.applyDeadband(m_x.getAsDouble(), Constants.kDeadzone);
     var rotVal = MathUtil.applyDeadband(m_rot.getAsDouble(), Constants.kDeadzone);
 
-    m_drive.swerve(new Translation2d(yVal, xVal).times(DrivetrainConstants.maxSpeed), new Rotation2d(rotVal), m_robotCentric.getAsBoolean());
+    //m_drive.swerve(new Translation2d(yVal, xVal).times(DrivetrainConstants.maxSpeed), new Rotation2d(rotVal), m_robotCentric.getAsBoolean());
+    m_drive.swerve(new Translation2d(xVal, yVal).times(DrivetrainConstants.maxSpeed), new Rotation2d(rotVal), true);
   }
 
   // Called once the command ends or is interrupted.

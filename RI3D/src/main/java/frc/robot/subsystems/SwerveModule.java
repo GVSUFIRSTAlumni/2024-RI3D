@@ -37,7 +37,7 @@ public class SwerveModule {
         m_encoderOffset = new Rotation2d(encoderOffset);
 
         m_drivePID = m_driveMotor.getPIDController();
-        m_steerPID = new PIDController(0, 0, 0); // TODO: set theses
+        m_steerPID = new PIDController(0.01, 0, 0); // TODO: set theses
         
         m_lastAngle = getState().angle;
 
@@ -49,7 +49,7 @@ public class SwerveModule {
      * @param state 
      */
     public void setDesiredState(SwerveModuleState state)  {
-        setSpeed(state);
+        // setSpeed(state);
         setAngle(state);
     }
 
@@ -58,7 +58,7 @@ public class SwerveModule {
      * @return
      */
     private SwerveModuleState getState() {
-        if (m_curState != null) {
+        if (m_curState == null) {
             m_curState = new SwerveModuleState();
         }
 
@@ -103,7 +103,8 @@ public class SwerveModule {
      * @param state
      */
     private void setAngle(SwerveModuleState state) {
-        Rotation2d angle = (Math.abs(state.speedMetersPerSecond) <= (DrivetrainConstants.maxSpeed * 0.01)) ? m_lastAngle : state.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        //Rotation2d angle = (Math.abs(state.speedMetersPerSecond) <= (DrivetrainConstants.maxSpeed * 0.01)) ? m_lastAngle : state.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        Rotation2d angle = state.angle;
         m_steerPID.setSetpoint(angle.getDegrees());
         m_lastAngle = angle;
     }
@@ -116,21 +117,17 @@ public class SwerveModule {
      * 
      */
     private void configDrive() {
+        m_driveMotor.restoreFactoryDefaults();
+
         m_driveMotor.getEncoder().setVelocityConversionFactor((Units.inchesToMeters(3) * Math.PI / 6.75)); // in meters per second
         m_driveMotor.getEncoder().setPositionConversionFactor((Units.inchesToMeters(3) * Math.PI / 6.75));
 
-        // PID loop        
-        m_drivePID.setP(0d);
-        m_drivePID.setI(0d);
-        m_drivePID.setIZone(0d);
-        m_drivePID.setD(0d);
-        m_drivePID.setFF(0d);
+        m_drivePID.setP(DrivetrainConstants.DriveParams.kP);
+        m_drivePID.setI(DrivetrainConstants.DriveParams.kI);
+        m_drivePID.setD(DrivetrainConstants.DriveParams.kD);
+        m_drivePID.setFF(DrivetrainConstants.DriveParams.kFF);
 
-        m_drivePID.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
-        m_drivePID.setSmartMotionAllowedClosedLoopError(0d, 0);
-        m_drivePID.setSmartMotionMaxAccel(0d, 0);
-        m_drivePID.setSmartMotionMaxVelocity(0d, 0);
-        m_drivePID.setSmartMotionMinOutputVelocity(0d, 0);
+        m_driveMotor.setIdleMode(DrivetrainConstants.DriveParams.kIdleMode);
 
         m_driveMotor.burnFlash();
     }

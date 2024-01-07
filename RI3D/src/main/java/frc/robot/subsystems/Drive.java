@@ -27,6 +27,9 @@ public class Drive extends SubsystemBase {
         m_Gyro = gyro;
 
         m_frontLeft = new SwerveModule(DrivetrainConstants.frontLeftDriveID, DrivetrainConstants.frontLeftSteerID, DrivetrainConstants.frontLeftCANCoderID, 0d);
+        m_frontRight = new SwerveModule(DrivetrainConstants.frontRightDriveID, DrivetrainConstants.frontRightSteerID, DrivetrainConstants.frontRightCANCoderID, 0d);
+        m_backLeft = new SwerveModule(DrivetrainConstants.backLeftDriveID, DrivetrainConstants.backLeftSteerID, DrivetrainConstants.backLeftCANCoderID, 0d);
+        m_backRight = new SwerveModule(DrivetrainConstants.backRightDriveID, DrivetrainConstants.backRightSteerID, DrivetrainConstants.backRightCANCoderID, 0d);
 
         // TODO double check my negatives :^)
         m_frontLeftLocation = new Translation2d(-DrivetrainConstants.xOffsetMeters, DrivetrainConstants.yOffsetMeters);
@@ -104,5 +107,17 @@ public class Drive extends SubsystemBase {
         m_backLeft.updateSteer();
         m_backRight.updateSteer();
         m_odometry.update(m_Gyro.getGyroAngle(), getSwerveModulePositions());
+    }
+
+    public void goToAngle(double ang) {
+        SwerveModuleState frontLeftState = new SwerveModuleState(0d, new Rotation2d(ang));
+        SwerveModuleState frontRightState = new SwerveModuleState(0d, new Rotation2d(ang));
+        SwerveModuleState backLeftState = new SwerveModuleState(0d, new Rotation2d(ang));
+        SwerveModuleState backRightState = new SwerveModuleState(0d, new Rotation2d(ang));
+
+        m_frontLeft.setDesiredState(frontLeftState);
+        m_frontRight.setDesiredState(frontRightState);
+        m_backLeft.setDesiredState(backLeftState);
+        m_backRight.setDesiredState(backRightState);
     }
 }
