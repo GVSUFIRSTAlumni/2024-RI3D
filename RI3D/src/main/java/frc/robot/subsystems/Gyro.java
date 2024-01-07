@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 
 public class Gyro {
@@ -14,8 +15,8 @@ public class Gyro {
      * 
      * @return raw gyro angle in degrees
      */
-    public double getGyroAngle() {
-        return m_gyro.getCompassHeading();
+    public Rotation2d getGyroAngle() {
+        return new Rotation2d(m_gyro.getCompassHeading());
     }
 
     public void zeroGyro() {

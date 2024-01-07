@@ -5,9 +5,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.DrivetrainConstants;
@@ -66,6 +68,10 @@ public class SwerveModule {
         return m_curState;
     }
 
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(getDistance(), new Rotation2d(getAngle()));
+    }
+
     
     /**
      * Gets the speed of the drive motor.
@@ -102,11 +108,16 @@ public class SwerveModule {
         m_lastAngle = angle;
     }
 
+    private double getDistance() {
+        return m_driveMotor.getEncoder().getPosition();
+    }
+
     /**
      * 
      */
     private void configDrive() {
         m_driveMotor.getEncoder().setVelocityConversionFactor((Units.inchesToMeters(3) * Math.PI / 6.75)); // in meters per second
+        m_driveMotor.getEncoder().setPositionConversionFactor((Units.inchesToMeters(3) * Math.PI / 6.75));
 
         // PID loop        
         m_drivePID.setP(0d);
@@ -114,6 +125,12 @@ public class SwerveModule {
         m_drivePID.setIZone(0d);
         m_drivePID.setD(0d);
         m_drivePID.setFF(0d);
+
+        m_drivePID.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+        m_drivePID.setSmartMotionAllowedClosedLoopError(0d, 0);
+        m_drivePID.setSmartMotionMaxAccel(0d, 0);
+        m_drivePID.setSmartMotionMaxVelocity(0d, 0);
+        m_drivePID.setSmartMotionMinOutputVelocity(0d, 0);
 
         m_driveMotor.burnFlash();
     }

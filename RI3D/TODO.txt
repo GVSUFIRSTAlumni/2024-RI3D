@@ -1,4 +1,4 @@
-( ) fill constants
+( ) fill constants (need robot wired)
 ( ) tune PID loops (need robot on/working)
 (X) drive conversion factor
     ( ) test <- real

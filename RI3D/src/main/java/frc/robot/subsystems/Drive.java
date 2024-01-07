@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -34,7 +36,7 @@ public class Drive extends SubsystemBase {
 
         m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-        m_odometry = new SwerveDriveOdometry(m_kinematics, gyro.getGyroAngle(), );
+        m_odometry = new SwerveDriveOdometry(m_kinematics, gyro.getGyroAngle(), getSwerveModulePositions());
     }
 
     /**
@@ -78,11 +80,29 @@ public class Drive extends SubsystemBase {
         swerve(translation, rotation, true);
     }
 
+    private SwerveModulePosition[] getSwerveModulePositions() {
+        SwerveModulePosition[] positions = new SwerveModulePosition[4];
+        positions[0] = m_frontLeft.getPosition();
+        positions[1] = m_frontRight.getPosition();
+        positions[2] = m_backLeft.getPosition();
+        positions[3] = m_backRight.getPosition();
+        return positions;
+    }
+
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        m_odometry.resetPosition(m_Gyro.getGyroAngle(), getSwerveModulePositions(), pose);
+    }
+
     @Override
     public void periodic() {
         m_frontLeft.updateSteer();
         m_frontRight.updateSteer();
         m_backLeft.updateSteer();
         m_backRight.updateSteer();
+        m_odometry.update(m_Gyro.getGyroAngle(), getSwerveModulePositions());
     }
 }
