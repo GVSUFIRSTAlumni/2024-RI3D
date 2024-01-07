@@ -27,8 +27,6 @@ public class Swerve extends SubsystemBase {
     m_gyro.configFactoryDefault();
     zeroGyro();
 
-    m_swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getPositions());
-
     m_swerveMods =
         new SwerveModule[] {
           new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -36,6 +34,9 @@ public class Swerve extends SubsystemBase {
           new SwerveModule(2, Constants.Swerve.Mod2.constants),
           new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
+
+    m_swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getPositions());
+
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);
@@ -79,7 +80,7 @@ public class Swerve extends SubsystemBase {
     return m_swerveOdometry.getPoseMeters();
   }
 
-  public void resetOdometry(Pose2d pose) {
+  public void setPose(Pose2d pose) {
     m_swerveOdometry.resetPosition(getYaw(), getPositions(), pose);
   }
 
