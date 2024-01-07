@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.DrivetrainConstants;
@@ -26,10 +27,10 @@ public class Drive extends SubsystemBase {
     public Drive(Gyro gyro) {
         m_Gyro = gyro;
 
-        m_frontLeft = new SwerveModule(DrivetrainConstants.frontLeftDriveID, DrivetrainConstants.frontLeftSteerID, DrivetrainConstants.frontLeftCANCoderID, 0d);
-        m_frontRight = new SwerveModule(DrivetrainConstants.frontRightDriveID, DrivetrainConstants.frontRightSteerID, DrivetrainConstants.frontRightCANCoderID, 0d);
-        m_backLeft = new SwerveModule(DrivetrainConstants.backLeftDriveID, DrivetrainConstants.backLeftSteerID, DrivetrainConstants.backLeftCANCoderID, 0d);
-        m_backRight = new SwerveModule(DrivetrainConstants.backRightDriveID, DrivetrainConstants.backRightSteerID, DrivetrainConstants.backRightCANCoderID, 0d);
+        m_frontLeft = new SwerveModule(DrivetrainConstants.frontLeftDriveID, DrivetrainConstants.frontLeftSteerID, DrivetrainConstants.frontLeftCANCoderID, DrivetrainConstants.frontLeftEncoderOffset, 0);
+        m_frontRight = new SwerveModule(DrivetrainConstants.frontRightDriveID, DrivetrainConstants.frontRightSteerID, DrivetrainConstants.frontRightCANCoderID, DrivetrainConstants.frontRightEncoderOffset, 1);
+        m_backLeft = new SwerveModule(DrivetrainConstants.backLeftDriveID, DrivetrainConstants.backLeftSteerID, DrivetrainConstants.backLeftCANCoderID, DrivetrainConstants.backLeftEncoderOffset, 2);
+        m_backRight = new SwerveModule(DrivetrainConstants.backRightDriveID, DrivetrainConstants.backRightSteerID, DrivetrainConstants.backRightCANCoderID, DrivetrainConstants.backRightEncoderOffset, 3);
 
         // TODO double check my negatives :^)
         m_frontLeftLocation = new Translation2d(-DrivetrainConstants.xOffsetMeters, DrivetrainConstants.yOffsetMeters);
@@ -48,17 +49,17 @@ public class Drive extends SubsystemBase {
      * @param rotation      rotational magnitude (radians/sec)
      * @param fieldOriented if true, swerve with respect to the bot
      */
-    public void swerve(Translation2d translation, Rotation2d rotation, boolean fieldOriented) {
+    public void swerve(Translation2d translation, Double rotation, boolean fieldOriented) {
         ChassisSpeeds speeds;
         if (fieldOriented) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 translation.getX(),
                 translation.getY(),
-                rotation.getRadians(),
+                rotation,
                 new Rotation2d(m_Gyro.getGyroAngleClamped())
             );
         } else {
-            speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation.getRadians());
+            speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
         }
 
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
@@ -79,7 +80,7 @@ public class Drive extends SubsystemBase {
      * @param translation   linear movement (meters/sec)
      * @param rotation      rotation (radians/sec)
      */
-    public void swerve(Translation2d translation, Rotation2d rotation) {
+    public void swerve(Translation2d translation, Double rotation) {
         swerve(translation, rotation, true);
     }
 
@@ -107,5 +108,19 @@ public class Drive extends SubsystemBase {
         m_backLeft.updateSteer();
         m_backRight.updateSteer();
         m_odometry.update(m_Gyro.getGyroAngle(), getSwerveModulePositions());
+    }
+
+    public void goToAngle(double ang) {
+        System.out.println("Passed angle: " + ang);
+
+        SwerveModuleState frontLeftState = new SwerveModuleState(0d, new Rotation2d(Units.degreesToRadians(ang)));
+        SwerveModuleState frontRightState = new SwerveModuleState(0d, new Rotation2d(Units.degreesToRadians(ang)));
+        SwerveModuleState backLeftState = new SwerveModuleState(0d, new Rotation2d(Units.degreesToRadians(ang)));
+        SwerveModuleState backRightState = new SwerveModuleState(0d, new Rotation2d(Units.degreesToRadians(ang)));
+
+        m_frontLeft.setDesiredState(frontLeftState);
+        m_frontRight.setDesiredState(frontRightState);
+        m_backLeft.setDesiredState(backLeftState);
+        m_backRight.setDesiredState(backRightState);
     }
 }

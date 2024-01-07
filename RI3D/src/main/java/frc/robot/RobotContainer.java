@@ -10,7 +10,9 @@ import frc.robot.commands.Swerve.TeleopDrive;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Gyro;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,6 +26,7 @@ public class RobotContainer {
   private final Drive m_drive = new Drive(m_gyro);
 
   private final XboxController m_driver = new XboxController(Constants.kDriveController);
+  private final CommandXboxController m_controller = new CommandXboxController(Constants.kDriveController);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -40,6 +43,35 @@ public class RobotContainer {
         m_drive
       )
     );
+
+    m_controller.a().onTrue(new InstantCommand() {
+      @Override
+      public void initialize() {
+          m_drive.goToAngle(180);
+          System.out.println("moving to 180");
+      }
+    });
+    m_controller.b().onTrue(new InstantCommand() {
+      @Override
+      public void initialize() {
+          m_drive.goToAngle(90);
+          System.out.println("moving to 90");
+      }
+    });
+    m_controller.y().onTrue(new InstantCommand() {
+      @Override
+      public void initialize() {
+          m_drive.goToAngle(0);
+          System.out.println("moving to 0");
+      }
+    });
+    m_controller.x().onTrue(new InstantCommand() {
+      @Override
+      public void initialize() {
+          m_drive.goToAngle(270);
+          System.out.println("moving to 270");
+      }
+    });
   }
 
   /**
@@ -48,7 +80,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
