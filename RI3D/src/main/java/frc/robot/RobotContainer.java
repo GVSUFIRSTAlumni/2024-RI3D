@@ -25,7 +25,7 @@ public class RobotContainer {
   private final Gyro m_gyro = new Gyro();
   private final Drive m_drive = new Drive(m_gyro);
 
-  // private final XboxController m_driver = new XboxController(Constants.kDriveController);
+  private final XboxController m_driver = new XboxController(Constants.kDriveController);
   private final CommandXboxController m_controller = new CommandXboxController(Constants.kDriveController);
 
 
@@ -34,15 +34,15 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    // m_drive.setDefaultCommand(
-    //   new TeleopDrive(
-    //     () -> m_driver.getLeftY(),
-    //     () -> m_driver.getLeftX(),
-    //     () -> m_driver.getRightX(),
-    //     () -> m_driver.getAButton(),
-    //     m_drive
-    //   )
-    // );
+    m_drive.setDefaultCommand(
+      new TeleopDrive(
+        () -> m_driver.getLeftY(),
+        () -> m_driver.getLeftX(),
+        () -> m_driver.getRightX(),
+        () -> m_driver.getAButton(),
+        m_drive
+      )
+    );
 
     m_controller.a().onTrue(new InstantCommand() {
       @Override

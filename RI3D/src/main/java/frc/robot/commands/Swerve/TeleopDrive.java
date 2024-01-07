@@ -8,7 +8,6 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -45,7 +44,7 @@ public class TeleopDrive extends CommandBase {
     var rotVal = MathUtil.applyDeadband(m_rot.getAsDouble(), Constants.kDeadzone);
 
     //m_drive.swerve(new Translation2d(yVal, xVal).times(DrivetrainConstants.maxSpeed), new Rotation2d(rotVal), m_robotCentric.getAsBoolean());
-    m_drive.swerve(new Translation2d(xVal, yVal).times(DrivetrainConstants.maxSpeed), new Rotation2d(rotVal), true);
+    m_drive.swerve(new Translation2d(xVal, yVal).times(DrivetrainConstants.maxSpeed), rotVal * DrivetrainConstants.maxTurningSpeed, true);
   }
 
   // Called once the command ends or is interrupted.
