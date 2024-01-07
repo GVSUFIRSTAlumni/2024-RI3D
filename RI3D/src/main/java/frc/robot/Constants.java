@@ -6,6 +6,9 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -21,10 +24,12 @@ public final class Constants {
     public static final int kDriveController = 1;
     public static final double kDeadzone = 0.05;
 
-    public static final class DrivetrainConstants {
+    public static final class SwerveConstants {
         // public static final double maxSpeed = Units.feetToMeters(15.1);
         public static final double maxSpeed = Units.feetToMeters(30);
-        public static final double maxTurningSpeed = 4.5;
+        public static final double maxTurningSpeed = 4.5; // units?
+        public static final double wheelDiameter = Units.inchesToMeters(4.0);
+        public static final double wheelCircumference = wheelDiameter * Math.PI;
 
         public static final int frontLeftDriveID = 4;
         public static final int frontLeftSteerID = 3;
@@ -49,12 +54,27 @@ public final class Constants {
         public static final double xOffsetMeters = Units.inchesToMeters(12.5);
         public static final double yOffsetMeters = Units.inchesToMeters(12.5);
 
+        public static final SwerveDriveKinematics swerveKinematics = 
+            new SwerveDriveKinematics(
+                new Translation2d(-xOffsetMeters, yOffsetMeters),
+                new Translation2d(xOffsetMeters, yOffsetMeters),
+                new Translation2d(xOffsetMeters, -yOffsetMeters),
+                new Translation2d(-xOffsetMeters, -yOffsetMeters)
+            );
+
         public static final class DriveParams {
+            public static final double kS = 0.667;
+            public static final double kV = 2.44;
+            public static final double kA = 0.27;
+
             public static final double kP = 0.1;
             public static final double kI = 0;
             public static final double kD = 0;
-            public static final double kFF = 1;
+            public static final double kFF = new SimpleMotorFeedforward(kS, kV, kA).calculate(maxSpeed);
             public static final IdleMode kIdleMode = IdleMode.kBrake;
+            public static final double kGearRatio = 6.75d;
+            public static final double kPositionCF = wheelCircumference / kGearRatio;
+            public static final double kVelocityCF = kPositionCF / 60;
         }
 
         public static final class SteerParams {
@@ -63,6 +83,8 @@ public final class Constants {
             public static final double kD = 0;
             public static final double kFF = 0;
             public static final IdleMode kIdleMode = IdleMode.kBrake;
+            public static final double kGearRatio = 12.8;
+            public static final double kPositionCF = 360 / kGearRatio;
         }
     }
 }
