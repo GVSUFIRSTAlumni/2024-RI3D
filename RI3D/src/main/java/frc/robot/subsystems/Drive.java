@@ -50,6 +50,7 @@ public class Drive extends SubsystemBase {
      * @param fieldOriented if true, swerve with respect to the bot
      */
     public void swerve(Translation2d translation, Double rotation, boolean fieldOriented) {
+        System.out.println("Heading: " + m_Gyro.getGyroAngleClamped());
         ChassisSpeeds speeds;
         if (fieldOriented) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(

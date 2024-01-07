@@ -170,7 +170,7 @@ public class SwerveModule {
         // m_driveMotor.setVoltage(driveV);
         if(m_swerveID == 0) {
             // System.out.println("Current setpoint: " + m_drivePID.getSetpoint());
-            System.out.println("Current speed :" + getSpeed());
+            // System.out.println("Current speed :" + getSpeed());
             // System.out.println(driveV);
         }
     }
