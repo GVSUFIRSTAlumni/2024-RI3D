@@ -10,8 +10,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.DumppyConstants;
 
 public class Dumppy extends ProfiledPIDSubsystem {
@@ -28,7 +28,8 @@ public class Dumppy extends ProfiledPIDSubsystem {
             0,
             0,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(3600, 3000)));
+            new TrapezoidProfile.Constraints(3600 * Constants.DumppyConstants.dumpySpeed,
+             3000 * Constants.DumppyConstants.dumpySpeed)));
 
     m_dumppy = new CANSparkMax(DumppyConstants.kDumppyMotorID, MotorType.kBrushless);
 
