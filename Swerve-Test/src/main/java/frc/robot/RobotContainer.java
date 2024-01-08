@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.exampleAuto;
@@ -40,6 +41,9 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+    camera.setFPS(60);
   }
 
   /**
@@ -51,8 +55,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     new JoystickButton(driver, XboxController.Button.kStart.value).onTrue(new InstantCommand(() -> m_swerve.zeroGyro()));
-    new JoystickButton(driver, XboxController.Button.kA.value).onTrue(new DumpDaLoad(m_dumppy)).onFalse(new CloseDaDumppy(m_dumppy));
+    new JoystickButton(driver, XboxController.Button.kB.value).onTrue(new CarryDaLoad(m_dumppy));
     new JoystickButton(driver, XboxController.Button.kX.value).whileTrue(new X_Lock(m_swerve));
+    new JoystickButton(driver, XboxController.Button.kBack.value).onTrue(new InstantCommand(() -> m_swerve.resetSteeringEncoders()));
+
+    new JoystickButton(driver, XboxController.Button.kA.value).whileTrue(new DumpDaLoad(m_dumppy));
   }
 
   /**

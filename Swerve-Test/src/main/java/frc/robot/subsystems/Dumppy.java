@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.DumppyConstants;
 
@@ -23,16 +24,16 @@ public class Dumppy extends ProfiledPIDSubsystem {
     super(
         // The ProfiledPIDController used by the subsystem
         new ProfiledPIDController(
-            0.1,
+            0.3,
             0,
             0,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(90, 180)));
+            new TrapezoidProfile.Constraints(3600, 3000)));
 
     m_dumppy = new CANSparkMax(DumppyConstants.kDumppyMotorID, MotorType.kBrushless);
 
     m_encoder = m_dumppy.getEncoder();
-    m_encoder.setPositionConversionFactor((1 / 48) * 360);
+    m_encoder.setPositionConversionFactor((1.0 / 48.0) * 360.0);
     m_encoder.setPosition(0);
 
     m_controller.setGoal(0);
@@ -49,5 +50,11 @@ public class Dumppy extends ProfiledPIDSubsystem {
   public double getMeasurement() {
     // Return the process variable measurement here
     return m_encoder.getPosition();
+  }
+
+  @Override
+  public void periodic() {
+    // System.out.println(m_encoder.getPosition());
+    super.periodic();
   }
 }

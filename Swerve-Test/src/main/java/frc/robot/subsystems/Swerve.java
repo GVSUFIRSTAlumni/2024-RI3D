@@ -100,6 +100,12 @@ public class Swerve extends SubsystemBase {
     return positions;
   }
 
+  public void resetSteeringEncoders() {
+    for (SwerveModule mod : m_swerveMods) {
+      mod.resetToAbsolute();
+    }
+  }
+
   public void zeroGyro() {
     m_gyro.setYaw(0);
   }
