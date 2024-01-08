@@ -31,14 +31,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    m_swerve.setDefaultCommand(
-        new TeleopSwerve(
-            m_swerve,
-            () -> -driver.getLeftY(),
-            () -> -driver.getLeftX(),
-            () -> -driver.getRightX(),
-            () -> driver.getLeftBumper()));
-
     // Configure the button bindings
     configureButtonBindings();
 
@@ -53,6 +45,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_swerve.setDefaultCommand(
+      new TeleopSwerve(
+        m_swerve,
+        () -> -driver.getLeftY(),
+        () -> -driver.getLeftX(),
+        () -> -driver.getRightX(),
+        () -> driver.getLeftBumper(),
+        () -> driver.getRightBumper()
+      )
+    );
+
     /* Driver Buttons */
     new JoystickButton(driver, XboxController.Button.kStart.value).onTrue(new InstantCommand(() -> m_swerve.zeroGyro()));
     new JoystickButton(driver, XboxController.Button.kB.value).onTrue(new CarryDaLoad(m_dumppy));

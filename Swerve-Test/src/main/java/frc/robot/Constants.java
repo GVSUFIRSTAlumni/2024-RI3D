@@ -12,6 +12,7 @@ public final class Constants {
 
   public static final class DumppyConstants {
     public static final int kDumppyMotorID = 9;
+    public static final double dumpySpeed = 0.15;
   }
 
   public static final class Swerve {
@@ -72,6 +73,7 @@ public final class Constants {
     /* Swerve Profiling Values */
     public static final double maxSpeed = Units.feetToMeters(15.1); // meters per second
     public static final double maxAngularVelocity = 4.5;
+    public static final double throttleRatio = 0.3;
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;

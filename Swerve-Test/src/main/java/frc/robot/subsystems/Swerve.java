@@ -20,6 +20,8 @@ public class Swerve extends SubsystemBase {
   private SwerveDriveOdometry m_swerveOdometry;
   private SwerveModule[] m_swerveMods;
 
+  private boolean throttled = false;
+
   private Field2d field;
 
   public Swerve() {
@@ -114,6 +116,14 @@ public class Swerve extends SubsystemBase {
     return (Constants.Swerve.invertGyro)
         ? Rotation2d.fromDegrees(360 - m_gyro.getYaw())
         : Rotation2d.fromDegrees(m_gyro.getYaw());
+  }
+
+  public boolean isThrottled() {
+    return this.throttled;
+  }
+
+  public void setThrottled(boolean newThrottle) {
+    this.throttled = newThrottle;
   }
 
   @Override

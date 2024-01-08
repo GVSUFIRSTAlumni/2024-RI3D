@@ -15,6 +15,7 @@ public class TeleopSwerve extends CommandBase {
   private DoubleSupplier m_strafeSup;
   private DoubleSupplier m_rotationSup;
   private BooleanSupplier m_robotCentricSup;
+  private BooleanSupplier m_clutchSupplier;
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
@@ -25,7 +26,8 @@ public class TeleopSwerve extends CommandBase {
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,
-      BooleanSupplier robotCentricSup) {
+      BooleanSupplier robotCentricSup,
+      BooleanSupplier clutchSup) {
     m_swerve = swerve;
     addRequirements(m_swerve);
 
@@ -33,6 +35,7 @@ public class TeleopSwerve extends CommandBase {
     m_strafeSup = strafeSup;
     m_rotationSup = rotationSup;
     m_robotCentricSup = robotCentricSup;
+    m_clutchSupplier = clutchSup;
   }
 
   @Override
@@ -50,7 +53,9 @@ public class TeleopSwerve extends CommandBase {
 
     /* Drive */
     m_swerve.drive(
-        new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+        new Translation2d(translationVal, strafeVal).times(
+          (m_clutchSupplier.getAsBoolean() ? Constants.Swerve.throttleRatio : 1) * Constants.Swerve.maxSpeed
+        ),
         rotationVal * Constants.Swerve.maxAngularVelocity,
         !m_robotCentricSup.getAsBoolean(),
         true);
