@@ -1,7 +1,0 @@
-( ) fill constants (need robot wired)
-( ) tune PID loops (need robot on/working)
-(X) drive conversion factor
-    ( ) test <- real
-( ) implement X wheel pattern
-( ) zero constants for absolute encoder (need robot on/working)
-( ) magic motion profiles for drive
