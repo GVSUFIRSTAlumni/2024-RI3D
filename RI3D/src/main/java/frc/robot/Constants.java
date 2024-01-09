@@ -143,4 +143,8 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
+
+  public static final class SlayConstants {
+    public static final int lightPort = 1;
+  }
 }
