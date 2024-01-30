@@ -24,20 +24,20 @@ public class X_Lock extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SwerveModuleState fourtyFive = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
-    SwerveModuleState oneThirtyFive = new SwerveModuleState(0.0, Rotation2d.fromDegrees(135));
+    // SwerveModuleState fourtyFive = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+    // SwerveModuleState oneThirtyFive = new SwerveModuleState(0.0, Rotation2d.fromDegrees(135));
 
-    states[0] = fourtyFive;
-    states[1] = oneThirtyFive;
-    states[2] = fourtyFive;
-    states[3] = oneThirtyFive;
+    // states[0] = fourtyFive;
+    // states[1] = oneThirtyFive;
+    // states[2] = fourtyFive;
+    // states[3] = oneThirtyFive;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_swerve.lock();
-    m_swerve.setModuleStates(states);
+    // m_swerve.setModuleStates(states);
   }
 
   // Called once the command ends or is interrupted.

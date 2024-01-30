@@ -52,7 +52,7 @@ public class RobotContainer {
         () -> -driver.getLeftX(),
         () -> -driver.getRightX(),
         () -> driver.getLeftBumper(),
-        () -> driver.getRightBumper()
+        () -> !driver.getRightBumper()
       )
     );
 
