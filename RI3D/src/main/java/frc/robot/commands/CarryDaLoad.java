@@ -19,7 +19,7 @@ public class CarryDaLoad extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_dumppy.setGoal(45);
+    m_dumppy.setGoal(55);
     m_dumppy.enable();
   }
 }
